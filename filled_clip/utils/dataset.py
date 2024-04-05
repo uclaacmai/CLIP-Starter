@@ -68,8 +68,8 @@ class CLIPDataset(torch.utils.data.Dataset):
             list(captions), padding=True, truncation=True, max_length=config.max_length
         )
         self.transforms = transforms
-        print(f"Number of samples: {len(self.captions)}")
-        print(f"Number of images: {len(self.image_filenames)}")
+        # print(f"Number of samples: {len(self.captions)}")
+        # print(f"Number of images: {len(self.image_filenames)}")
 
     def __getitem__(self, idx):
         item = {
@@ -78,8 +78,8 @@ class CLIPDataset(torch.utils.data.Dataset):
         }
 
         image = cv2.imread(os.path.join(config.image_path, self.image_filenames[idx]))
-        print(os.path.join(config.image_path, self.image_filenames[idx]))
-        print(image)
+        # print(os.path.join(config.image_path, self.image_filenames[idx]))
+        # print(image)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) 
         item["image"] = self.transforms(image).float()
         item["caption"] = self.captions[idx]
