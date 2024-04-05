@@ -9,6 +9,7 @@ def train_epoch(model, train_loader, optimizer, lr_scheduler, step):
     tqdm_object = tqdm(train_loader, total=len(train_loader))
     for batch in tqdm_object:
         batch = {k: v.to(config.device) for k, v in batch.items() if k != "caption"}
+        # print(batch["image"].shape)
         loss = model(batch)
         optimizer.zero_grad()
         loss.backward()

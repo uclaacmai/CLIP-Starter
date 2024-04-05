@@ -8,6 +8,20 @@ import torchvision.transforms.v2
 import pandas as pd
 import numpy as np
 
+def prepare_data():
+    df = pd.read_csv("../data/flickr30k_images/results.csv", delimiter="|")
+    df.columns = ['image', 'caption_number', 'caption']
+    df['caption'] = df['caption'].str.lstrip()
+    df['caption_number'] = df['caption_number'].str.lstrip()
+    df.loc[19999, 'caption_number'] = "4"
+    df.loc[19999, 'caption'] = "A dog runs across the grass ."
+    ids = [id_ for id_ in range(len(df) // 5) for i in range(5)]
+    df['id'] = ids
+    df.to_csv(f"{config.captions_path}/captions.csv", index=False)
+
+
+
+
 def make_train_valid_dfs():
     dataframe = pd.read_csv(f"{config.captions_path}/captions.csv")
     max_id = dataframe["id"].max() + 1 if not config.debug else 100
@@ -54,6 +68,8 @@ class CLIPDataset(torch.utils.data.Dataset):
             list(captions), padding=True, truncation=True, max_length=config.max_length
         )
         self.transforms = transforms
+        print(f"Number of samples: {len(self.captions)}")
+        print(f"Number of images: {len(self.image_filenames)}")
 
     def __getitem__(self, idx):
         item = {
@@ -62,8 +78,10 @@ class CLIPDataset(torch.utils.data.Dataset):
         }
 
         image = cv2.imread(os.path.join(config.image_path, self.image_filenames[idx]))
+        print(os.path.join(config.image_path, self.image_filenames[idx]))
+        print(image)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) 
-        item["image"] = self.transforms(image).permute(2, 0, 1).float()
+        item["image"] = self.transforms(image).float()
         item["caption"] = self.captions[idx]
 
         return item

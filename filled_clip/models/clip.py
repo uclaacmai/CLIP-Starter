@@ -25,7 +25,7 @@ class CLIPModel(nn.Module):
 
     def forward(self, batch):
         # Getting Image and Text Features
-        print(1)
+        # print("CLIP Model forward pass!")
         image_features = self.image_encoder(batch["image"])
 
         text_features = self.text_encoder(

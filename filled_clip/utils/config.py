@@ -12,7 +12,7 @@ patience = 2
 factor = 0.5
 
 # dataset configs
-image_path = "../data/Images"
+image_path = "../data/flickr30k_images"
 captions_path = "../data/"
 im_size = 224
 max_length = 200
@@ -25,6 +25,6 @@ projection_dim = 256
 
 # clip configs
 temperature = 1.0
-image_embedding = 2048
+image_embedding = 1000 # ResNet50 output size
 text_embedding = 768
 text_tokenizer = "distilbert-base-uncased"
